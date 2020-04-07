@@ -6,6 +6,7 @@ import {
 import { ipcRenderer, shell, webFrame } from 'electron';
 import log from 'electron-log';
 import { createMemoryHistory } from 'history';
+import moment from 'moment';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -265,7 +266,9 @@ export default class AppRenderer {
 
     try {
       const accountToken = await IpcRendererEventChannel.account.create();
-      const accountExpiry = new Date().toISOString();
+      const accountExpiry = moment()
+        .subtract(2, 'd')
+        .toISOString();
       actions.account.accountCreated(accountToken, accountExpiry);
       this.redirectToConnect(false);
     } catch (error) {
